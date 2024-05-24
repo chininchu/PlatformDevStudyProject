@@ -9,10 +9,39 @@
 // System.debug('Hello World!');
 // System.debug('My name is ' + tempvar);
 
-String desiredState = 'CA';
-List <Account> caliAccounts = AccountUtils.accountsByState(desiredState);
+// String desiredState = 'CA';
+// List <Account> caliAccounts = AccountUtils.accountsByState(desiredState);
 
-System.debug(caliAccounts);
+// System.debug(caliAccounts);
+
+
+Http http = new Http();
+
+HttpRequest request = new HttpRequest();
+
+request.setEndpoint('https://th-apex-http-callout.herokuapp.com/animals');
+
+request.setMethod('POST');
+
+request.setHeader('Content-Type','application/json;charset=UTF-8' );
+
+// Set the body as a JSON Object
+
+request.setBody('{"name" : "mighty moose"}');
+
+HttpResponse response = http.send(request);
+
+// Parse the JSON 
+
+if(response.getStatusCode() != 201) {
+    System.debug('The status code returned was not expected: ' + response.getStatusCode() + ' ' + response.getStatus());
+} else {
+    System.debug(response.getBody());
+}
+
+
+
+
 
 
 
