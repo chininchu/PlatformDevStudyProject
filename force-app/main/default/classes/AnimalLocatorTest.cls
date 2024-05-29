@@ -12,6 +12,8 @@ private class AnimalLocatorTest{
 
         System.assertEquals(result, expectedResult);
 
+        //Test
+
     }
 
 }
