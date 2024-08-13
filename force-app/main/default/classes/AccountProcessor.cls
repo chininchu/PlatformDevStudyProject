@@ -1,15 +1,36 @@
 public class AccountProcessor {
-    @future
-    public static void countContacts(List<Id> accountIds) {
-        List<Account> accountsToUpdate = [
-            SELECT Id, (SELECT Id FROM Contacts) 
-            FROM Account 
-            WHERE Id IN :accountIds
-        ];
+  public static List<Account> processAccounts(
+    List<Account> accounts,
+    System.AccessLevel accessLevel
+  ) {
+    // Strip inaccessible fields before processing
+    SObjectAccessDecision decision = Security.stripInaccessible(
+      AccessType.READABLE,
+      accounts
+    );
 
-        for (Account acc : accountsToUpdate) {
-            acc.Number_Of_Contacts__c = acc.Contacts.size();
+    List<Account> strippedAccounts = (List<Account>) decision.getRecords();
+
+    for (Account acc : strippedAccounts) {
+      if (accessLevel == System.AccessLevel.SYSTEM_MODE) {
+        // In system mode, we can update all fields
+        if (acc.AnnualRevenue > 1000000) {
+          acc.Large_Account__c = true;
+          acc.Description = 'Large Account processed in System Mode';
+        } else {
+          acc.Large_Account__c = false;
+          acc.Description = 'Small Account processed in System Mode';
         }
-        update accountsToUpdate;
+      } else if (accessLevel == System.AccessLevel.USER_MODE) {
+        // In user mode, we only update fields the user has access to
+        if (acc.AnnualRevenue > 1000000) {
+          acc.Large_Account__c = true;
+        } else {
+          acc.Large_Account__c = false;
+        }
+      }
     }
+
+    return strippedAccounts;
+  }
 }

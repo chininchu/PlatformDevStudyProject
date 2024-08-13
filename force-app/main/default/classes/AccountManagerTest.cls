@@ -1,37 +1,34 @@
 @IsTest
-
 private class AccountManagerTest {
+  @isTest
+  static void testGetAccount() {
+    Account a = new Account(Name = 'Test Account');
 
-    @isTest static void testGetAccount() {
+    insert a;
 
-        Account a = new Account(Name='Test Account');
+    Contact c = new Contact(
+      AccountId = a.Id,
+      FirstName = 'Test',
+      LastName = 'Test'
+    );
 
-        Insert a;
+    insert c;
 
-        Contact c = new Contact(AccountId=a.Id, FirstName='Test', LastName='Test');
+    RestRequest request = new RestRequest();
 
-        insert c;
+    request.requestURI =
+      'https://yourInstance.salesforce.com/services/apexrest/Accounts/' +
+      a.Id +
+      '/contacts';
 
-        RestRequest request = new RestRequest();
+    request.httpMethod = 'GET';
 
-        request.requestURI = 'https://yourInstance.salesforce.com/services/apexrest/Accounts/' + a.Id + '/contacts';
+    RestContext.request = request;
 
-        
+    Account myAcct = AccountManager.getAccount();
 
-        request.httpMethod = 'GET';
+    System.assert(myAcct != null, 'message');
 
-        RestContext.request = request;
-
-        Account myAcct = AccountManager.getAccount();
-
-        System.assert(myAcct != null, 'message');
-
-        System.assertEquals('TestAccount', myAcct.Name, 'messag1');
-    
-    }
-
-
+    System.assertEquals('TestAccount', myAcct.Name, 'messag1');
+  }
 }
-
-
-

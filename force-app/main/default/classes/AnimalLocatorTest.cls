@@ -1,19 +1,15 @@
 @isTest
+private class AnimalLocatorTest {
+  @isTest
+  static void AnimalLocatorMock1() {
+    Test.SetMock(HttpCallOutMock.class, new AnimalLocatorMock());
 
-private class AnimalLocatorTest{
+    string result = AnimalLocator.getAnimalNameById(3);
 
-    @isTest static  void AnimalLocatorMock1() {
+    string expectedResult = 'chicken';
 
-        Test.SetMock(HttpCallOutMock.class, new AnimalLocatorMock());
+    System.assertEquals(result, expectedResult);
 
-        string result=AnimalLocator.getAnimalNameById(3);
-
-        string expectedResult='chicken';
-
-        System.assertEquals(result, expectedResult);
-
-        //Test
-
-    }
-
+    //Test
+  }
 }

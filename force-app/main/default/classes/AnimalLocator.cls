@@ -1,51 +1,43 @@
-public class AnimalLocator
+public class AnimalLocator {
+  public static String getAnimalNameById(Integer id) {
+    Http http = new Http();
 
-{
+    HttpRequest request = new HttpRequest();
 
-  public static String getAnimalNameById(Integer id)
+    request.setEndpoint(
+      'https://th-apex-http-callout.herokuapp.com/animals/' + id
+    );
 
-   {
+    request.setMethod('GET');
 
-        Http http = new Http();
+    HttpResponse response = http.send(request);
 
-        HttpRequest request = new HttpRequest();
+    String strResp = '';
 
-        request.setEndpoint('https://th-apex-http-callout.herokuapp.com/animals/'+id);
+    system.debug('******response ' + response.getStatusCode());
 
-        request.setMethod('GET');
+    system.debug('******response ' + response.getBody());
 
-        HttpResponse response = http.send(request);
+    // If the request is successful, parse the JSON response.
 
-          String strResp = '';
+    if (response.getStatusCode() == 200) {
+      // Deserializes the JSON string into collections of primitive data types.
 
-           system.debug('******response '+response.getStatusCode());
+      Map<String, Object> results = (Map<String, Object>) JSON.deserializeUntyped(
+        response.getBody()
+      );
 
-           system.debug('******response '+response.getBody());
+      // Cast the values in the 'animals' key as a list
 
-        // If the request is successful, parse the JSON response.
+      Map<string, object> animals = (map<string, object>) results.get('animal');
 
-        if (response.getStatusCode() == 200) 
+      System.debug('Received the following animals:' + animals);
 
-        {
+      strResp = string.valueof(animals.get('name'));
 
-            // Deserializes the JSON string into collections of primitive data types.
+      System.debug('strResp >>>>>>' + strResp);
+    }
 
-           Map<String, Object> results = (Map<String, Object>) JSON.deserializeUntyped(response.getBody());
-
-            // Cast the values in the 'animals' key as a list
-
-           Map<string,object> animals = (map<string,object>) results.get('animal');
-
-            System.debug('Received the following animals:' + animals );
-
-            strResp = string.valueof(animals.get('name'));
-
-            System.debug('strResp >>>>>>' + strResp );
-
-        }
-
-        return strResp ;
-
-   }
-
+    return strResp;
+  }
 }
