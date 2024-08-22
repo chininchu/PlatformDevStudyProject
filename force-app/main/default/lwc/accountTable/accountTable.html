@@ -1,15 +1,18 @@
 <!-- sldsValidatorIgnore -->
 <template>
-    <lightning-card title="Accounts" icon-name="standard:account">
-        <div class="slds-m-around_medium">
-            <lightning-datatable
-                key-field="Id"
-                data={accounts.data}
-                columns={columns}
-                hide-checkbox-column="true"
-                onsave={handleUpdateRecords}
-                draft-values={draftValues}>
-            </lightning-datatable>
-        </div>
-    </lightning-card>
+  <lightning-card title="Accounts" icon-name="standard:account">
+    <div class="slds-m-around_medium">
+      <lightning-datatable
+        key-field="Id"
+        data={accounts.data}
+        columns={columns}
+        hide-checkbox-column="true"
+        onsave={handleUpdateRecords}
+        draft-values={draftValues}
+      >
+      </lightning-datatable>
+    </div>
+  </lightning-card>
+
+  <c-my-button message={columns}></c-my-button>
 </template>

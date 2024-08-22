@@ -1,0 +1,14 @@
+<aura:component>
+  <aura:attribute name="numbers" type="List" default="[]" />
+
+  <lightning:button label="Show Numbers" onclick="{!c.showNumbers}" />
+
+  <aura:if isTrue="{!not(empty(v.numbers))}">
+    <p>Numbers:</p>
+    <ul>
+      <aura:iteration items="{!v.numbers}" var="num">
+        <li>{!num}</li>
+      </aura:iteration>
+    </ul>
+  </aura:if>
+</aura:component>
